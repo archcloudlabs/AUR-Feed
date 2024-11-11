@@ -2,25 +2,19 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"os"
+	"strings"
+
+	aur "github.com/AUR-Feed/pkg"
 	"github.com/go-git/go-git/v5"
 )
-
-
-func errCheck(err error) {
-	if err != nil {
-		msg := "Error! " + err.Error()
-		panic(msg)
-	}
-}
 
 
 func main() {
 
 	url := "http://aur.archlinux.org/rss"
-	rss,err := FetchAndParseRSS(url)
-	errCheck(err)
+	rss, err := aur.FetchAndParseRSS(url)
+	aur.ErrCheck(err)
 
 	fmt.Printf("Channel: %s\nDescription: %s\n\n", rss.Channel.Title, rss.Channel.Description)
 	for _, item := range rss.Channel.Items {
@@ -29,8 +23,8 @@ func main() {
 		repo := strings.Replace(item.Link, "packages/", "", 1)
 
 		// TODO: check the git clone, and send a message to a repo or something.
-		_, _= git.PlainClone(item.Title + ".git", false, &git.CloneOptions{
-			URL: repo,
+		_, _ = git.PlainClone(item.Title+".git", false, &git.CloneOptions{
+			URL:      repo,
 			Progress: os.Stdout,
 		})
 	}
