@@ -1,6 +1,6 @@
-module arch-rss
+module github.com/AUR-Feed
 
-go 1.23.0
+go 1.23.2
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
