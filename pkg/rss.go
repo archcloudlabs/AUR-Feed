@@ -37,16 +37,19 @@ func ErrCheck(err error) {
 func FetchAndParseRSS(url string) (*RSS, error){
 
 	resp, err := http.Get(url)
-	ErrCheck(err)
+	if err != nil {
+		return nil,err
+	}
 
 	defer resp.Body.Close() // close the handle later.
 
 	data, err := io.ReadAll(resp.Body)
-	ErrCheck(err)
 
 	var rss RSS
 	err = xml.Unmarshal(data, &rss)
-	ErrCheck(err)
+	if err != nil {
+		return nil,err
+	}
 
-	return &rss, nil
+	return &rss, err
 }
